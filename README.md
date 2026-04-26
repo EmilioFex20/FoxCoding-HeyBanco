@@ -7,7 +7,7 @@
 Hemos dividido nuestro desarrollo en tres pilares fundamentales. Haz clic en los enlaces para explorar cada uno:
 
 * **🧪 [Google Colabs - Ciencia de Datos](https://colab.research.google.com/drive/1bkh_mDo6JgdXSGFcyvg6__vrKwewrqdd?usp=sharing):** Aquí encontrarás todo nuestro Análisis Exploratorio de Datos (EDA), el entrenamiento de modelos y la ingeniería de variables.
-* **📊 [Dashboard de Salud Financiera](https://heyia-e8e97.web.app/):**  **Dar click en Vista usuario **. La interfaz web donde el usuario puede visualizar sus insights, simulación de buró y proyecciones de ahorro.
+* **📊 [Dashboard de Salud Financiera](https://heyia-e8e97.web.app/):**  **Dar click en Vista usuario**. La interfaz web donde el usuario puede visualizar sus insights, simulación de buró y proyecciones de ahorro.
 * **📱 [Aplicación HAVI](https://hey-banco.vercel.app/):** El prototipo funcional de nuestra app con el chatbot inteligente y el motor de alertas proactivas.
 * **📱 [Presentación HAVI](https://heyia-e8e97.web.app/):** La presentación con los componentes importantes
 ---
