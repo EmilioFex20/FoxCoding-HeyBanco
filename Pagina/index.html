@@ -14,6 +14,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
   <style>
     /* ================================================
        VARIABLES & BASE
@@ -147,7 +149,29 @@
       max-width: 560px; line-height: 1.85;
       letter-spacing: .009em;
     }
+.diagrama-container {
+  max-width: 900px;
+  margin: 40px auto;
+  overflow: visible; /* Permitimos que la imagen sobresalga al crecer */
+  perspective: 1000px;
+}
 
+.diagrama-zoom {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* El efecto al pasar el mouse o mantener presionado */
+.diagrama-zoom:hover, .diagrama-zoom:active {
+  transform: scale(1.15); /* Crece un 15% */
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+  border-color: var(--accent);
+  z-index: 10;
+  position: relative;
+}
     /* chart wrapper */
     .chart-wrap {
       background: var(--bg-card);
@@ -380,7 +404,144 @@
     }
 
     /* ================================================
-       8 — IMPACTO
+       8 — MOTOR DE DECISIÓN
+    ================================================ */
+    #motor-decision { background: var(--bg-1); }
+
+    .decision-shell {
+      display: grid;
+      gap: 18px;
+      margin-top: 42px;
+    }
+    .decision-case {
+      background: linear-gradient(180deg, rgba(17,26,48,.94), rgba(11,17,31,.98));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 22px 58px rgba(0,0,0,.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .decision-case::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.03), transparent 38%);
+      pointer-events: none;
+    }
+    .decision-case > * {
+      position: relative;
+      z-index: 1;
+    }
+    .decision-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .decision-kicker {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .decision-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0;
+    }
+    .decision-persona {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .decision-pill {
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      color: var(--text-2);
+    }
+    .decision-flow {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+    .decision-step {
+      min-height: 210px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.06);
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .decision-step.data {
+      background: rgba(0,195,255,.07);
+      border-color: rgba(0,195,255,.22);
+    }
+    .decision-step.logic {
+      background: rgba(167,139,250,.08);
+      border-color: rgba(167,139,250,.24);
+    }
+    .decision-step.action {
+      background: rgba(46,213,115,.08);
+      border-color: rgba(46,213,115,.22);
+    }
+    .decision-step.security {
+      background: rgba(252,236,2,.07);
+      border-color: rgba(252,236,2,.18);
+      margin-top: 14px;
+      min-height: 0;
+    }
+    .decision-step-label {
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .decision-step.data .decision-step-label { color: #5dd6ff; }
+    .decision-step.logic .decision-step-label { color: #c2a8ff; }
+    .decision-step.action .decision-step-label { color: #86efac; }
+    .decision-step.security .decision-step-label { color: var(--accent); }
+    .decision-main {
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--text-1);
+    }
+    .decision-sub {
+      margin-top: 14px;
+      font-size: .84rem;
+      line-height: 1.65;
+      color: var(--text-2);
+    }
+    .decision-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.16);
+      padding: 0 2px;
+    }
+    .decision-note {
+      margin-top: 26px;
+      color: var(--text-3);
+      font-size: .8rem;
+      line-height: 1.7;
+      max-width: 720px;
+    }
+
+    /* ================================================
+       9 — IMPACTO
     ================================================ */
     #impacto { background: var(--bg-1); }
 
@@ -409,8 +570,8 @@
     .metric-val  { font-size: .98rem; font-weight: 700; margin-bottom: 6px; }
     .metric-desc { font-size: .8rem; color: var(--text-2); line-height: 1.45; }
 
-    /* ================================================
-       9 — ARQUITECTURA
+     /* ================================================
+       10 — ARQUITECTURA
     ================================================ */
     #arquitectura { background: var(--bg-2); }
 
@@ -472,6 +633,181 @@
     }
 
     /* ================================================
+       10 — PIPELINE TÉCNICO DISCRETO
+    ================================================ */
+    #pipeline-modelo {
+      background: var(--bg-0);
+      padding-top: 58px;
+      padding-bottom: 110px;
+    }
+    .pipeline-panel {
+      max-width: 1180px;
+      margin: 0 auto;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(17,26,48,.72), rgba(9,15,30,.92));
+      box-shadow: 0 20px 58px rgba(0,0,0,.22);
+      overflow: hidden;
+    }
+    .pipeline-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 28px;
+    }
+    .pipeline-kicker {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .pipeline-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.08;
+      margin: 0 0 10px;
+    }
+    .pipeline-copy {
+      font-size: .9rem;
+      line-height: 1.7;
+      color: var(--text-2);
+      max-width: 640px;
+      margin: 0;
+    }
+    .pipeline-toggle {
+      flex-shrink: 0;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      color: var(--text-1);
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .pipeline-toggle:hover {
+      transform: translateY(-2px);
+      border-color: rgba(252,236,2,.2);
+      background: rgba(252,236,2,.05);
+    }
+    .pipeline-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .7s cubic-bezier(.22,.61,.36,1), opacity .35s ease;
+      opacity: 0;
+      border-top: 1px solid rgba(255,255,255,.04);
+    }
+    .pipeline-panel.open .pipeline-expand {
+      max-height: 640px;
+      opacity: 1;
+    }
+    .pipeline-rail {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(180px, 1fr));
+      gap: 14px;
+      padding: 24px 28px 18px;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .pipeline-rail::-webkit-scrollbar { display: none; }
+    .pipeline-step {
+      min-height: 220px;
+      padding: 18px 18px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.025);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .45s ease, transform .45s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .pipeline-step.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .pipeline-step:hover {
+      border-color: rgba(255,255,255,.1);
+      box-shadow: 0 16px 30px rgba(0,0,0,.18);
+    }
+    .pipeline-step.ingesta { background: rgba(0,195,255,.06); border-color: rgba(0,195,255,.16); }
+    .pipeline-step.nlp { background: rgba(167,139,250,.07); border-color: rgba(167,139,250,.16); }
+    .pipeline-step.features { background: rgba(255,255,255,.03); }
+    .pipeline-step.insight { background: rgba(0,195,255,.05); border-color: rgba(0,195,255,.12); }
+    .pipeline-step.segmentacion { background: rgba(167,139,250,.05); border-color: rgba(167,139,250,.12); }
+    .pipeline-step.activacion { background: rgba(46,213,115,.07); border-color: rgba(46,213,115,.16); }
+    .pipeline-icon {
+      font-size: 1.42rem;
+      margin-bottom: 14px;
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.04);
+    }
+    .pipeline-label {
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+    .pipeline-main {
+      font-size: .98rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text-1);
+      margin-bottom: 10px;
+    }
+    .pipeline-sub {
+      font-size: .82rem;
+      color: var(--text-2);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .pipeline-detail {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(6,11,24,.94);
+      border: 1px solid rgba(255,255,255,.06);
+      color: var(--text-2);
+      font-size: .76rem;
+      line-height: 1.55;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .22s ease, transform .22s ease;
+      pointer-events: none;
+    }
+    .pipeline-step:hover .pipeline-detail,
+    .pipeline-step:focus-within .pipeline-detail {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .pipeline-foot {
+      padding: 0 28px 22px;
+      font-size: .8rem;
+      color: var(--text-3);
+      line-height: 1.7;
+    }
+    .pipeline-foot strong {
+      color: var(--text-2);
+      font-weight: 600;
+    }
+
+    /* ================================================
        FOOTER
     ================================================ */
     footer {
@@ -494,6 +830,8 @@
       .arch-arr    { transform: rotate(90deg); }
       .arch-vline  { display: none; }
       .hero-h1     { letter-spacing: -.028em; }
+      .pipeline-top { flex-direction: column; align-items: flex-start; }
+      .pipeline-rail { grid-template-columns: repeat(6, minmax(220px, 220px)); }
     }
 
     /* ================================================
@@ -1106,9 +1444,7 @@
       background: rgba(255,255,255,.03);
       color: var(--text-2);
     }
-    
-
-/* Ajuste para el grid de la tarjeta de saldo */
+  /* Ajuste para el grid de la tarjeta de saldo */
 .uv-balance-meta {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Dos columnas arriba */
@@ -1149,8 +1485,6 @@
   transform: translateX(5px);
   background: rgba(255, 255, 255, 0.05);
 }
-
-
     .uv-stat {
       padding: 14px 16px;
       border-radius: 18px;
@@ -1517,9 +1851,6 @@
       .uv-row {
         grid-template-columns: 1fr;
       }
-      .uv-balance-meta {
-        grid-template-columns: 1fr;
-      }
       .uv-donut-wrap,
       .uv-head {
         flex-direction: column;
@@ -1530,6 +1861,17 @@
       .nav-actions {
         width: 100%;
         justify-content: flex-end;
+      }
+      .decision-flow {
+        grid-template-columns: 1fr;
+      }
+      .decision-arrow {
+        transform: rotate(90deg);
+        min-height: 28px;
+      }
+      .decision-head {
+        flex-direction: column;
+        align-items: flex-start;
       }
       .uv-card {
         padding: 22px;
@@ -1662,6 +2004,7 @@
       <a href="#emociones">Emociones</a>
       <a href="#momento-clave">Hallazgo</a>
       <a href="#solucion">Solución</a>
+      <a href="#motor-decision">Motor IA</a>
       <a href="#impacto">Impacto</a>
     </div>
     <button id="userViewToggle" class="nav-toggle-btn" type="button" data-user-view-toggle>Vista Usuario</button>
@@ -1677,6 +2020,7 @@
   <div class="sdot"     data-s="momento-clave"  title="Hallazgo clave"></div>
   <div class="sdot"     data-s="insight"        title="Insight"></div>
   <div class="sdot"     data-s="solucion"       title="Solución"></div>
+  <div class="sdot"     data-s="motor-decision" title="Motor IA"></div>
   <div class="sdot"     data-s="impacto"        title="Impacto"></div>
   <div class="sdot"     data-s="arquitectura"   title="Arquitectura"></div>
 </div>
@@ -1984,11 +2328,6 @@
                   indicando fricción en el onboarding.</span>
           </div>
 
-          <div class="finding-card">
-            <div class="finding-dot" style="background:var(--green);"></div>
-            <span>Detectar urgencia en los primeros 2 turnos predice con 78% de precisión
-                  que la conversación escala a queja.</span>
-          </div>
 
         </div>
 
@@ -2089,7 +2428,152 @@
 
 
 <!-- ================================================
-     8. IMPACTO DE NEGOCIO
+     8. MOTOR DE DECISIÓN INTELIGENTE
+================================================ -->
+<section id="motor-decision">
+  <div class="container">
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8 text-center">
+        <div class="s-label reveal">Motor de Decisión Inteligente</div>
+        <div class="s-rule reveal d1 mx-auto"></div>
+        <h2 class="s-title reveal d1">Datos de comportamiento.<br>Intervención personalizada.</h2>
+        <p class="s-body reveal d2 mx-auto">
+          El sistema no responde igual a todos. Lee señales de gasto y estado emocional,
+          prioriza la mejor palanca de retención y adapta el mensaje a cada contexto.
+        </p>
+      </div>
+    </div>
+
+    <div class="decision-shell">
+
+      <div class="decision-case reveal d2">
+        <div class="decision-head">
+          <div>
+            <div class="decision-kicker">Caso 1</div>
+            <h3 class="decision-title">Supermercado con gasto alto</h3>
+          </div>
+          <div class="decision-persona">
+            <span class="decision-pill">Top categoría: supermercado</span>
+            <span class="decision-pill">Gasto: alto</span>
+            <span class="decision-pill">Emoción: neutral</span>
+          </div>
+        </div>
+
+        <div class="decision-flow">
+          <div class="decision-step data reveal d2">
+            <div>
+              <div class="decision-step-label">Input</div>
+              <div class="decision-main">Gasto alto en supermercado detectado</div>
+            </div>
+            <div class="decision-sub">El motor detecta una categoría recurrente de alto volumen y baja urgencia emocional.</div>
+          </div>
+
+          <div class="decision-arrow reveal d3" aria-hidden="true">
+            <svg width="28" height="18" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="0" y1="9" x2="20" y2="9"></line>
+              <polyline points="13,2 20,9 13,16"></polyline>
+            </svg>
+          </div>
+
+          <div class="decision-step logic reveal d3">
+            <div>
+              <div class="decision-step-label">Decisión</div>
+              <div class="decision-main">Activar cashback 5%</div>
+            </div>
+            <div class="decision-sub">La IA elige un incentivo útil y frecuente, priorizando valor percibido sobre descuento genérico.</div>
+          </div>
+
+          <div class="decision-arrow reveal d4" aria-hidden="true">
+            <svg width="28" height="18" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="0" y1="9" x2="20" y2="9"></line>
+              <polyline points="13,2 20,9 13,16"></polyline>
+            </svg>
+          </div>
+
+          <div class="decision-step action reveal d4">
+            <div>
+              <div class="decision-step-label">Output</div>
+              <div class="decision-main">"Este mes has gastado más en supermercado 🛒<br>Te activamos 5% de cashback extra esta semana.<br>¿Te gustaría aprovecharlo?"</div>
+            </div>
+            <div class="decision-sub">La recomendación conecta con un hábito real, reduce churn potencial y mejora utilidad percibida.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="decision-case reveal d3">
+        <div class="decision-head">
+          <div>
+            <div class="decision-kicker">Caso 2</div>
+            <h3 class="decision-title">Usuario con señales de miedo</h3>
+          </div>
+          <div class="decision-persona">
+            <span class="decision-pill">Emoción: miedo</span>
+            <span class="decision-pill">Riesgo de churn: alto</span>
+            <span class="decision-pill">Objetivo: recuperar confianza</span>
+          </div>
+        </div>
+
+        <div class="decision-flow">
+          <div class="decision-step data reveal d3">
+            <div>
+              <div class="decision-step-label">Input</div>
+              <div class="decision-main">Usuario con señales de desconfianza detectadas</div>
+            </div>
+            <div class="decision-sub">El sistema interpreta miedo como una barrera de confianza, no como un caso para promoción inmediata.</div>
+          </div>
+
+          <div class="decision-arrow reveal d4" aria-hidden="true">
+            <svg width="28" height="18" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="0" y1="9" x2="20" y2="9"></line>
+              <polyline points="13,2 20,9 13,16"></polyline>
+            </svg>
+          </div>
+
+          <div class="decision-step logic reveal d4">
+            <div>
+              <div class="decision-step-label">Decisión</div>
+              <div class="decision-main">Priorizar confianza sobre promoción</div>
+            </div>
+            <div class="decision-sub">La IA cambia el objetivo: primero contención emocional, después activación comercial.</div>
+          </div>
+
+          <div class="decision-arrow reveal d5" aria-hidden="true">
+            <svg width="28" height="18" viewBox="0 0 28 18" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="0" y1="9" x2="20" y2="9"></line>
+              <polyline points="13,2 20,9 13,16"></polyline>
+            </svg>
+          </div>
+
+          <div>
+            <div class="decision-step action reveal d5">
+              <div>
+                <div class="decision-step-label">Output</div>
+                <div class="decision-main">"Hola, estoy aquí para ayudarte 😊<br>Entiendo que manejar tu dinero puede generar dudas.<br>Puedo explicarte paso a paso cualquier operación."</div>
+              </div>
+              <div class="decision-sub">El mensaje reduce ansiedad, habilita diálogo y fortalece seguridad antes de cualquier oferta.</div>
+            </div>
+
+            <div class="decision-step security reveal d5">
+              <div class="decision-step-label">Mensaje de seguridad</div>
+              <div class="decision-main">"Tus datos están protegidos con cifrado de nivel bancario 🔐 y nunca realizamos movimientos sin tu confirmación."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="decision-note reveal d4 mx-auto text-center">
+      El sistema no empuja una promoción al azar: interpreta contexto, emoción y comportamiento para decidir qué intervención tiene más probabilidad de retener al usuario sin erosionar confianza.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ================================================
+     9. IMPACTO DE NEGOCIO
 ================================================ -->
 <section id="impacto">
   <div class="container">
@@ -2111,7 +2595,6 @@
       <div class="col-sm-6 col-lg-3">
         <div class="metric-card down reveal d1">
           <div class="metric-dir down">↓</div>
-          <div class="metric-val">15 – 25% Churn</div>
           <div class="metric-desc">Reducción en abandono de clientes que experimentaron alta fricción</div>
         </div>
       </div>
@@ -2119,7 +2602,6 @@
       <div class="col-sm-6 col-lg-3">
         <div class="metric-card down reveal d2">
           <div class="metric-dir down">↓</div>
-          <div class="metric-val">30% Llamadas</div>
           <div class="metric-desc">Menos escalados al centro de atención por resolución automática</div>
         </div>
       </div>
@@ -2127,7 +2609,6 @@
       <div class="col-sm-6 col-lg-3">
         <div class="metric-card up reveal d3">
           <div class="metric-dir up">↑</div>
-          <div class="metric-val">+18% Uso tarjeta</div>
           <div class="metric-desc">Mayor actividad transaccional tras resolver episodios de bloqueo</div>
         </div>
       </div>
@@ -2135,7 +2616,6 @@
       <div class="col-sm-6 col-lg-3">
         <div class="metric-card up reveal d4">
           <div class="metric-dir up">↑</div>
-          <div class="metric-val">+22% Ingresos</div>
           <div class="metric-desc">Retención de ingresos proyectada por clientes rescatados de churn</div>
         </div>
       </div>
@@ -2250,6 +2730,81 @@
 
 
 <!-- ================================================
+     11. PIPELINE DEL MODELO
+================================================ -->
+<section id="pipeline-modelo">
+  <div class="container">
+    <div class="pipeline-panel reveal" id="pipelinePanel">
+      <div class="pipeline-top">
+        <div>
+          <div class="pipeline-kicker">Respaldo técnico</div>
+          <h2 class="pipeline-title">Ver cómo funciona el modelo</h2>
+          <p class="pipeline-copy">Detrás de la experiencia hay un pipeline completo de ciencia de datos. Está diseñado para aportar rigor técnico sin distraer del valor de negocio.</p>
+        </div>
+        <button class="pipeline-toggle" id="pipelineToggle" type="button" aria-expanded="false">Explorar pipeline</button>
+      </div>
+
+      <div class="pipeline-expand" id="pipelineExpand">
+        <div class="pipeline-rail">
+          <div class="pipeline-step ingesta" tabindex="0">
+            <div class="pipeline-icon">📥</div>
+            <div class="pipeline-label">Ingesta</div>
+            <div class="pipeline-main">Datos estructurados y no estructurados</div>
+            <p class="pipeline-sub">Transacciones + chats + voz</p>
+            <div class="pipeline-detail">La señal útil no vive en una sola fuente. El pipeline consolida contexto financiero y conversacional.</div>
+          </div>
+
+          <div class="pipeline-step nlp" tabindex="0">
+            <div class="pipeline-icon">🧠</div>
+            <div class="pipeline-label">NLP</div>
+            <div class="pipeline-main">Procesamiento de lenguaje</div>
+            <p class="pipeline-sub">Intención + sentimiento → emociones</p>
+            <div class="pipeline-detail">El modelo traduce lenguaje natural en señales como frustración, urgencia, miedo o confianza.</div>
+          </div>
+
+          <div class="pipeline-step features" tabindex="0">
+            <div class="pipeline-icon">⚙️</div>
+            <div class="pipeline-label">Feature Engineering</div>
+            <div class="pipeline-main">Variables de negocio</div>
+            <p class="pipeline-sub">frecuencia, riesgo, gasto, categoría</p>
+            <div class="pipeline-detail">Se transforman eventos y texto en variables accionables para el negocio y el modelo.</div>
+          </div>
+
+          <div class="pipeline-step insight" tabindex="0">
+            <div class="pipeline-icon">📊</div>
+            <div class="pipeline-label">Modelo de Insight</div>
+            <div class="pipeline-main">Detección de fricción</div>
+            <p class="pipeline-sub">impacto = volumen × fricción</p>
+            <div class="pipeline-detail">La priorización no depende solo del volumen: cruza frecuencia con intensidad emocional.</div>
+          </div>
+
+          <div class="pipeline-step segmentacion" tabindex="0">
+            <div class="pipeline-icon">🧩</div>
+            <div class="pipeline-label">Segmentación</div>
+            <div class="pipeline-main">Clustering de usuarios</div>
+            <p class="pipeline-sub">frustrados, heavy users, inactivos</p>
+            <div class="pipeline-detail">El sistema agrupa comportamientos para adaptar intervención, tono y prioridad.</div>
+          </div>
+
+          <div class="pipeline-step activacion" tabindex="0">
+            <div class="pipeline-icon">⚡</div>
+            <div class="pipeline-label">Activación</div>
+            <div class="pipeline-main">IA prescriptiva</div>
+            <p class="pipeline-sub">alertas + ofertas + intervención</p>
+            <div class="pipeline-detail">La salida final no es un insight aislado: es una acción concreta, medible y personalizable.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-foot">
+          <strong>Pipeline diseñado para escalar en AWS:</strong> S3 · Lambda · Aurora · Lex
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================
      USER VIEW — Single-user banking dashboard
 ================================================ -->
 <section id="userView">
@@ -2276,36 +2831,36 @@
                 <span id="uvStatusChip" class="uv-chip">Estado estable</span>
               </div>
             </div>
-            <button class="uv-refresh" type="button" data-user-view-back>Volver al storytelling</button>
           </div>
           <div class="uv-balance-meta">
-            <div class="uv-stat">
-              <div class="uv-stat-label">Ingreso mensual</div>
-              <div id="uvIncome" class="uv-stat-value">$0</div>
-            </div>
-            <div class="uv-stat">
-              <div class="uv-stat-label">Gasto del mes</div>
-              <div id="uvExpense" class="uv-stat-value">$0</div>
-            </div>
-            <div class="uv-stat">
-              <div class="uv-stat-label">Última actualización</div>
-              <div id="uvUpdatedAt" class="uv-stat-value">Ahora</div>
-            </div>
-          </div>
+  <div class="uv-stat">
+    <div class="uv-stat-label">Ingreso mensual</div>
+    <div id="uvIncome" class="uv-stat-value">$0</div>
+  </div>
+  <div class="uv-stat">
+    <div class="uv-stat-label">Gasto del mes</div>
+    <div id="uvExpense" class="uv-stat-value">$0</div>
+  </div>
+  <div class="uv-stat" style="grid-column: span 2; border-left: 4px solid var(--accent); background: rgba(252, 236, 2, 0.05);">
+    <div class="uv-stat-label">Consejo Estratégico</div>
+    <div id="uvUpdatedAt" class="uv-stat-value" style="font-size: 0.95rem; font-weight: 500; color: var(--text-2); line-height: 1.4;">
+      Cargando recomendación...
+    </div>
+  </div>
+</div>
         </div>
 
         <div class="uv-row">
           <div class="uv-card">
-            <div class="uv-card-label">Gastos</div>
-            <div class="uv-donut-wrap">
-              <div id="uvDonut" class="uv-donut">
-                <div class="uv-donut-center">
-                  <div id="uvSpendPct" class="uv-donut-value">0%</div>
-                  <div class="uv-donut-copy">del ingreso</div>
-                </div>
-              </div>
-              <div id="uvLegend" class="uv-legend"></div>
+<div class="uv-card-label">Buró</div>
+          <div class="uv-buro-grid">
+            <div>
+              <div id="uvBuroScore" class="uv-buro-score">Bueno</div>
+              <p id="uvBuroCopy" class="uv-buro-copy">Tu perfil crediticio se mantiene saludable y estable.</p>
             </div>
+            <div id="uvBuroBadge" class="uv-buro-badge">Sin alertas</div>
+          </div>
+          <div id="uvBuroHint" class="uv-footer-note">Pagos al corriente y utilización controlada.</div>
           </div>
 
           <div class="uv-card">
@@ -2342,15 +2897,16 @@
         </div>
 
         <div class="uv-card">
-          <div class="uv-card-label">Buró</div>
-          <div class="uv-buro-grid">
-            <div>
-              <div id="uvBuroScore" class="uv-buro-score">Bueno</div>
-              <p id="uvBuroCopy" class="uv-buro-copy">Tu perfil crediticio se mantiene saludable y estable.</p>
+          <div class="uv-card-label">Gastos</div>
+            <div class="uv-donut-wrap">
+              <div id="uvDonut" class="uv-donut">
+                <div class="uv-donut-center">
+                  <div id="uvSpendPct" class="uv-donut-value">0%</div>
+                  <div class="uv-donut-copy">del ingreso</div>
+                </div>
+              </div>
+              <div id="uvLegend" class="uv-legend"></div>
             </div>
-            <div id="uvBuroBadge" class="uv-buro-badge">Sin alertas</div>
-          </div>
-          <div id="uvBuroHint" class="uv-footer-note">Pagos al corriente y utilización controlada.</div>
         </div>
       </div>
     </div>
@@ -2397,14 +2953,25 @@
   <div class="tt-popup-title">placeholder</div>
   <div class="tt-popup-body"></div>
 </div>
-
+<section id="visual-diagrama" style="background: var(--bg-1); padding: 100px 0; text-align: center;">
+  <div class="container">
+    <div class="reveal">
+      <div class="s-label">Arquitectura Visual</div>
+      <h2 class="s-title">Arquitectura escalable en AWS</h2>
+      
+      <div class="diagrama-container">
+        <img src="Diagrama2.jpeg" alt="Diagrama AWS" class="img-fluid diagrama-zoom">
+      </div>
+    
+    </div>
+  </div>
+</section>
 <!-- ================================================
      FOOTER
 ================================================ -->
 <footer>
   <div class="container">
     <p>Proyecto de Ciencia de Datos · <a href="#">Hey Banco</a> × <a href="#">CETYS Universidad</a> · 2025</p>
-    <p class="mt-1">Datos simulados con fines académicos y de demostración.</p>
   </div>
 </footer>
 
@@ -2429,7 +2996,7 @@ revEls.forEach(el => revObs.observe(el));
    SIDE PROGRESS DOTS
 ================================================ */
 const sIds = ['hero','problema','clasificacion','emociones',
-              'momento-clave','insight','solucion','impacto','arquitectura'];
+              'momento-clave','insight','solucion','motor-decision','impacto','arquitectura'];
 const dots = document.querySelectorAll('.sdot');
 
 dots.forEach((d, i) =>
@@ -2470,6 +3037,7 @@ sIds.forEach(id => {
     'momento-clave': 'mood-critical',
     insight:         'mood-critical',
     solucion:        'mood-resolve',
+    'motor-decision':'mood-resolve',
     impacto:         'mood-resolve',
     arquitectura:    'mood-resolve'
   };
@@ -3483,230 +4051,232 @@ function ntxSkipFn() {
 /* ================================================
    USER VIEW — Mock banking dashboard
 ================================================ */
+/* ================================================
+   USER VIEW — Dashboard Inteligente Nov 2025
+================================================ */
 (function () {
-  var body = document.body;
-  var userViewEl = document.getElementById('userView');
-  if (!userViewEl) return;
+  const body = document.body;
+  if (!document.getElementById('userView')) return;
 
-  var toggleEls = document.querySelectorAll('[data-user-view-toggle]');
-  var backEls = document.querySelectorAll('[data-user-view-back]');
-  var refreshEl = document.getElementById('userViewRefresh');
-  var navToggle = document.getElementById('userViewToggle');
+  let currentUserIdNumber = 1; 
+  let allClients = [];
+  let allProducts = [];
+  let isDataLoaded = false;
 
-  var refs = {
+  const refs = {
+    userIdDisplay: document.getElementById('uvCurrentUserId'), // El span que añadimos antes
+    clientTag: document.getElementById('uvClientTag'),
     balance: document.getElementById('uvBalance'),
-    balanceSub: document.getElementById('uvBalanceSub'),
-    accountTier: document.getElementById('uvAccountTier'),
-    statusChip: document.getElementById('uvStatusChip'),
     income: document.getElementById('uvIncome'),
     expense: document.getElementById('uvExpense'),
-    updatedAt: document.getElementById('uvUpdatedAt'),
+    updatedAt: document.getElementById('uvUpdatedAt'), 
     donut: document.getElementById('uvDonut'),
     spendPct: document.getElementById('uvSpendPct'),
     legend: document.getElementById('uvLegend'),
     savingsPct: document.getElementById('uvSavingsPct'),
-    savingsCopy: document.getElementById('uvSavingsCopy'),
     savingsFill: document.getElementById('uvSavingsFill'),
     savingsMeta: document.getElementById('uvSavingsMeta'),
-    investReturn: document.getElementById('uvInvestReturn'),
-    investCopy: document.getElementById('uvInvestCopy'),
+    investReturn: document.getElementById('uvInvestReturn'), // El % positivo
     investBalance: document.getElementById('uvInvestBalance'),
-    investProduct: document.getElementById('uvInvestProduct'),
+    investCopy: document.getElementById('uvInvestCopy'),
     buroScore: document.getElementById('uvBuroScore'),
-    buroCopy: document.getElementById('uvBuroCopy'),
-    buroBadge: document.getElementById('uvBuroBadge'),
-    buroHint: document.getElementById('uvBuroHint')
+    buroBadge: document.getElementById('uvBuroBadge')
   };
 
-  var spendColors = ['#fcec02', '#ffb703', '#8ecae6', '#2ed573'];
+  const spendColors = ['#fcec02', '#ffb703', '#8ecae6', '#a78bfa'];
 
-  function rnd(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  function formatCurrency(val) {
+    return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(val);
   }
 
-  function formatCurrency(value) {
-    return new Intl.NumberFormat('es-MX', {
-      style: 'currency',
-      currency: 'MXN',
-      maximumFractionDigits: 0
-    }).format(value);
-  }
+  function getSegment(ingreso, score, inversion, adopcionDigital) {
+    // Lógica basada en la tabla de clusters proporcionada
+    if (ingreso > 50000 && inversion === 0) 
+        return { name: "Apalancados de Alto Ingreso", tip: "Cuentas con liquidez alta pero poco ahorro. Considera mover un porcentaje a Inversión Hey para no perder contra la inflación." };
+    
+    if (score < 620 && ingreso < 20000) 
+        return { name: "Deudores en Fricción Técnica", tip: "Detectamos dificultades en pagos. Prioriza liquidar saldos con tasas altas para mejorar tu salud crediticia." };
+    
+    if (inversion > 50000 && score > 650) 
+        return { name: "Detractores Críticos", tip: "Tu nivel de inversión es excelente, pero hemos notado fricción en el servicio. ¿Hay algo puntual que podamos mejorar hoy?" };
 
-  function generateMockUserDashboard() {
-    var income = rnd(28000, 76000);
-    var expenseRatio = rnd(36, 72) / 100;
-    var expenses = Math.round(income * expenseRatio);
-    var balance = rnd(45000, 280000);
-    var savingsGoal = rnd(12000, 36000);
-    var savingsCurrent = rnd(Math.round(savingsGoal * .28), Math.round(savingsGoal * .96));
-    var investReturn = (rnd(38, 124) / 10).toFixed(1);
-    var investBalance = rnd(18000, 145000);
-    var tiers = ['Hey Smart', 'Hey Select', 'Hey Black'];
-    var buroStates = [
-      {
-        score: 'Excelente',
-        badge: 'Sin alertas',
-        copy: 'Tu perfil crediticio está por encima del promedio y con hábitos consistentes.',
-        hint: 'Pagos puntuales, utilización baja y buen historial reciente.'
-      },
-      {
-        score: 'Bueno',
-        badge: 'Estable',
-        copy: 'Tu situación crediticia es sólida y mantiene buen margen para nuevos productos.',
-        hint: 'Mantén la utilización por debajo del 30% para fortalecer tu score.'
-      },
-      {
-        score: 'En revisión',
-        badge: 'Atención ligera',
-        copy: 'Tu buró sigue saludable, pero hay señales pequeñas que conviene corregir pronto.',
-        hint: 'Reduce saldos revolventes y evita atrasos en los próximos cortes.'
-      }
-    ];
-    var buro = buroStates[rnd(0, buroStates.length - 1)];
+    if (adopcionDigital > 40) 
+        return { name: "Heavy Users Digitales", tip: "Aprovechas todas las herramientas de la App. Tu perfil es ideal para probar las nuevas funciones de trading." };
 
-    var spendParts = [
-      { label: 'Servicios', value: rnd(18, 28) },
-      { label: 'Compras', value: rnd(22, 34) },
-      { label: 'Movilidad', value: rnd(10, 18) },
-      { label: 'Ocio', value: rnd(8, 16) }
-    ];
-    var totalParts = spendParts.reduce(function (sum, part) { return sum + part.value; }, 0);
-    spendParts = spendParts.map(function (part) {
-      return {
-        label: part.label,
-        value: Math.round((part.value / totalParts) * expenses)
-      };
-    });
+    if (inversion > 150000) 
+        return { name: "Inversionistas VIP", tip: "Tu patrimonio crece sólidamente. Tienes acceso a tasas preferenciales en pagarés a 28 días." };
 
-    var topCategory = pickOne(['entretenimiento', 'supermercado', 'delivery', 'viajes']);
-    var gastoNivel = expenseRatio > .62 ? 'alto' : expenseRatio > .46 ? 'medio' : 'bajo';
-    var churnRisk = gastoNivel === 'alto'
-      ? rnd(56, 92)
-      : gastoNivel === 'medio'
-        ? rnd(34, 78)
-        : rnd(18, 62);
+    if (ingreso > 20000 && ingreso < 30000) 
+        return { name: "Nómina Tradicional", tip: "Tu ingreso es estable. Es el momento ideal para automatizar un ahorro del 10% mensual antes de tus gastos." };
 
-    return {
-      balance: balance,
-      income: income,
-      expenses: expenses,
-      expenseRatio: Math.round((expenses / income) * 100),
-      savingsGoal: savingsGoal,
-      savingsCurrent: savingsCurrent,
-      savingsPct: Math.min(100, Math.round((savingsCurrent / savingsGoal) * 100)),
-      investReturn: investReturn,
-      investBalance: investBalance,
-      investProduct: pickOne(['Inversión Hey', 'Hey Rendimiento', 'Meta+ Flexible']),
-      tier: pickOne(tiers),
-      buro: buro,
-      spendParts: spendParts,
-      status: expenses / income > .65 ? 'Gasto alto' : savingsCurrent / savingsGoal > .7 ? 'Buen ritmo' : 'Estado estable',
-      retentionUser: {
-        churn_risk: churnRisk,
-        top_category: topCategory,
-        gasto_nivel: gastoNivel
-      }
-    };
-  }
+    return { name: "Usuarios Inactivos / Prospectos", tip: "Casi no has usado tu cuenta este mes. ¿Sabías que tu primer depósito a Inversión Hey te da un bono de bienvenida?" };
+}
 
-  function pickOne(items) {
-    return items[rnd(0, items.length - 1)];
-  }
-
-  function renderLegend(parts) {
-    refs.legend.innerHTML = '';
-    parts.forEach(function (part, index) {
-      var pct = Math.round((part.value / parts.reduce(function (sum, item) { return sum + item.value; }, 0)) * 100);
-      var item = document.createElement('div');
-      item.className = 'uv-legend-item';
-      item.innerHTML = '<div class="uv-legend-name"><span class="uv-legend-dot" style="background:' + spendColors[index] + ';"></span>' + part.label + '</div>' +
-        '<div class="uv-legend-val">' + pct + '%</div>';
-      refs.legend.appendChild(item);
-    });
+  async function loadRealData() {
+    try {
+      const [rawClientes, rawProductos] = await Promise.all([
+        fetch('./hey_clientes.csv').then(res => res.text()),
+        fetch('./hey_productos.csv').then(res => res.text())
+      ]);
+      allClients = Papa.parse(rawClientes, { header: true, skipEmptyLines: true }).data;
+      allProducts = Papa.parse(rawProductos, { header: true, skipEmptyLines: true }).data;
+      isDataLoaded = true;
+      renderUserView();
+    } catch (error) { console.error("Error CSV:", error); }
   }
 
   function renderUserView() {
-    var data = generateMockUserDashboard();
-    var now = new Date();
-    var spendTotal = data.spendParts.reduce(function (sum, item) { return sum + item.value; }, 0);
-    var angle = Math.max(12, Math.min(340, Math.round((data.expenseRatio / 100) * 360)));
+    if (!isDataLoaded) return;
 
-    window.uvHeyiaProfile = data.retentionUser;
-    window.dispatchEvent(new CustomEvent('uvHeyiaProfileUpdated', { detail: data.retentionUser }));
+    const targetId = "USR-" + String(currentUserIdNumber).padStart(5, "0");
+    const user = allClients.find(u => u.user_id === targetId);
+    if (!user) { currentUserIdNumber = 1; renderUserView(); return; }
 
-    refs.balance.textContent = formatCurrency(data.balance);
-    refs.balanceSub.textContent = 'Disponible entre cuenta principal y apartados activos';
-    refs.accountTier.textContent = data.tier;
-    refs.statusChip.textContent = data.status;
-    refs.income.textContent = formatCurrency(data.income);
-    refs.expense.textContent = formatCurrency(data.expenses);
-    refs.updatedAt.textContent = now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-    refs.donut.style.background = 'conic-gradient(' +
-      spendColors[0] + ' 0deg ' + Math.round((data.spendParts[0].value / spendTotal) * 360) + 'deg,' +
-      spendColors[1] + ' ' + Math.round((data.spendParts[0].value / spendTotal) * 360) + 'deg ' + Math.round(((data.spendParts[0].value + data.spendParts[1].value) / spendTotal) * 360) + 'deg,' +
-      spendColors[2] + ' ' + Math.round(((data.spendParts[0].value + data.spendParts[1].value) / spendTotal) * 360) + 'deg ' + Math.round(((data.spendParts[0].value + data.spendParts[1].value + data.spendParts[2].value) / spendTotal) * 360) + 'deg,' +
-      spendColors[3] + ' ' + Math.round(((data.spendParts[0].value + data.spendParts[1].value + data.spendParts[2].value) / spendTotal) * 360) + 'deg 360deg)';
-    refs.spendPct.textContent = data.expenseRatio + '%';
-    renderLegend(data.spendParts);
+    const userProds = allProducts.filter(p => p.user_id === targetId);
+    
+    // Saldos Reales
+    const saldoDebito = userProds.filter(p => p.tipo_producto === 'cuenta_debito').reduce((a, c) => a + parseFloat(c.saldo_actual || 0), 0);
+    const saldoInversion = userProds.filter(p => p.tipo_producto === 'inversion_hey').reduce((a, c) => a + parseFloat(c.saldo_actual || 0), 0);
+    const ingreso = parseFloat(user.ingreso_mensual_mxn || 0);
+    const score = parseInt(user.score_buro || 0);
 
-    refs.savingsPct.textContent = data.savingsPct + '%';
-    refs.savingsCopy.textContent = data.savingsPct > 74
-      ? 'Vas por encima de tu ritmo esperado este mes.'
-      : 'Tu meta de ahorro sigue avanzando con buen paso.';
-    refs.savingsFill.style.width = '0%';
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        refs.savingsFill.style.width = data.savingsPct + '%';
-      });
+    // Actualizar ID y Segmento
+    if(refs.userIdDisplay) refs.userIdDisplay.textContent = targetId;
+    const segment = getSegment(ingreso, score);
+    if(refs.clientTag) refs.clientTag.textContent = segment.name;
+
+    refs.updatedAt.innerHTML = `<strong>Recomendación Nov 2025</strong> ${segment.tip}`;
+    
+
+    // Ingresos y Gastos (Row 2 columnas)
+    refs.income.textContent = formatCurrency(ingreso);
+    const ratioGastoTotal = 0.55 + (Math.random() * 0.2); // Simulación de gasto total
+    const gastoTotalMonto = ingreso * ratioGastoTotal;
+    refs.expense.textContent = formatCurrency(gastoTotalMonto);
+    refs.spendPct.textContent = Math.round(ratioGastoTotal * 100) + "%";
+
+    // Separación de Gastos por Segmentos
+    const segments = [
+      { label: 'Vivienda', val: 0.40 },
+      { label: 'Alimentos', val: 0.25 },
+      { label: 'Transporte', val: 0.20 },
+      { label: 'Ocio', val: 0.15 }
+    ];
+
+    refs.legend.innerHTML = '';
+    let cumulativeOffset = 0;
+    let conicParts = [];
+
+    segments.forEach((s, i) => {
+      const monto = gastoTotalMonto * s.val;
+      conicParts.push(`${spendColors[i]} ${cumulativeOffset}% ${cumulativeOffset + (s.val * 100)}%`);
+      cumulativeOffset += (s.val * 100);
+
+      const item = document.createElement('div');
+      item.className = 'uv-legend-item';
+      item.innerHTML = `
+        <div class="uv-legend-name"><span class="uv-legend-dot" style="background:${spendColors[i]}"></span>${s.label}</div>
+        <div class="uv-legend-val">${formatCurrency(monto)}</div>
+      `;
+      refs.legend.appendChild(item);
     });
-    refs.savingsMeta.textContent = formatCurrency(data.savingsCurrent) + ' de ' + formatCurrency(data.savingsGoal) + ' ahorrados';
+    refs.donut.style.background = `conic-gradient(${conicParts.join(', ')})`;
 
-    refs.investReturn.textContent = '+' + data.investReturn + '%';
-    refs.investCopy.textContent = 'Tu portafolio conserva una trayectoria positiva y sin volatilidad fuerte.';
-    refs.investBalance.textContent = 'Portafolio ' + formatCurrency(data.investBalance);
-    refs.investProduct.textContent = data.investProduct;
+    // Ahorro
+    const metaAhorro = ingreso * 3;
+    const pctAhorro = Math.min(100, Math.round((saldoDebito / metaAhorro) * 100));
+    refs.savingsPct.textContent = pctAhorro + "%";
+    refs.savingsFill.style.width = pctAhorro + "%";
+    refs.savingsFill.style.background = pctAhorro < 40 ? "#ff4757" : (pctAhorro < 80 ? "#fcec02" : "#2ed573");
+    refs.savingsMeta.textContent = `${formatCurrency(saldoDebito)} de ${formatCurrency(metaAhorro)}`;
 
-    refs.buroScore.textContent = data.buro.score;
-    refs.buroCopy.textContent = data.buro.copy;
-    refs.buroBadge.textContent = data.buro.badge;
-    refs.buroHint.textContent = data.buro.hint;
-  }
-
-  function setUserView(active) {
-    body.classList.toggle('user-view-active', active);
-    if (navToggle) navToggle.textContent = active ? 'Volver al Storytelling' : 'Vista Usuario';
-    if (active) {
-      renderUserView();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  toggleEls.forEach(function (el) {
-    el.addEventListener('click', function () {
-      if (body.classList.contains('user-view-active')) {
-        setUserView(false);
-        return;
+    // Inversiones: Ocultar si es 0
+    refs.investBalance.textContent = formatCurrency(saldoInversion);
+    if (saldoInversion <= 0) {
+      if(refs.investReturn) refs.investReturn.style.display = 'none'; // Oculta el div de % positivo
+      refs.investCopy.innerHTML = "<span style='color:#ff4757'>Estás perdiendo valor adquisitivo.</span> Iniciar inversión hoy es la mejor decisión.";
+    } else {
+      if(refs.investReturn) {
+        refs.investReturn.style.display = 'block';
+        refs.investReturn.textContent = "+11.2%";
+        refs.investReturn.style.color = "#2ed573";
       }
-      setUserView(true);
-    });
-  });
+      refs.investCopy.textContent = "Tu dinero crece mientras duermes. ¡Excelente!";
+    }
 
-  backEls.forEach(function (el) {
-    el.addEventListener('click', function () {
-      setUserView(false);
-    });
-  });
+    // Buró dinámico
+    refs.buroScore.textContent = score;
+    refs.buroBadge.style.background = score > 700 ? "#2ed573" : (score > 620 ? "#fcec02" : "#ff4757");
+    refs.buroBadge.textContent = score > 700 ? "Excelente" : "Regular";
+    
+    refs.balance.textContent = formatCurrency(saldoDebito + saldoInversion);
+  }
 
-  if (refreshEl) {
-    refreshEl.addEventListener('click', function () {
+  // Eventos de Navegación
+  document.querySelectorAll('[data-user-view-toggle]').forEach(el => el.addEventListener('click', () => {
+    body.classList.toggle('user-view-active');
+    if (body.classList.contains('user-view-active')) {
+      if (!isDataLoaded) loadRealData(); else renderUserView();
+    }
+  }));
+
+  if (document.getElementById('userViewRefresh')) {
+    document.getElementById('userViewRefresh').addEventListener('click', () => {
+      currentUserIdNumber++;
       renderUserView();
     });
   }
 })();
 
+
+/* ================================================
+   PIPELINE TÉCNICO — Toggle + staged reveal
+================================================ */
+(function () {
+ const panel = document.getElementById('pipelinePanel');
+  const toggle = document.getElementById('pipelineToggle');
+  const expand = document.getElementById('pipelineExpand');
+
+  if (!panel || !toggle || !expand) return;
+
+  // Convertimos a Array de forma moderna
+  const steps = [...panel.querySelectorAll('.pipeline-step')];
+  let timers = [];
+
+  const clearTimers = () => {
+    timers.forEach(clearTimeout);
+    timers = [];
+  };
+
+  const setOpen = (open) => {
+    panel.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.textContent = open ? 'Ocultar pipeline' : 'Explorar pipeline';
+
+    clearTimers();
+
+    if (!open) {
+      steps.forEach(step => step.classList.remove('show'));
+    } else {
+      steps.forEach((step, index) => {
+        const timer = setTimeout(() => {
+          step.classList.add('show');
+        }, 120 + index * 110);
+        timers.push(timer);
+      });
+    }
+  };
+
+  toggle.addEventListener('click', () => {
+    const isOpen = panel.classList.contains('open');
+    setOpen(!isOpen);
+  });
+})();
+
+
 /* ================================================
    HEYIA — Solo Vista Usuario
-   Conversación más humana y prescriptiva
+  Retención prescriptiva basada en gasto
 ================================================ */
 (function () {
   var body = document.body;
@@ -3722,13 +4292,79 @@ function ntxSkipFn() {
   if (!bubble || !win || !msgs || !input || !send) return;
 
   var open = false;
+  var currentUser = null;
+  var currentAction = null;
 
-  var starters = [
-    'Noté que este mes tus gastos subieron. Puedo ayudarte a optimizarlos.',
-    'Detecté margen para mejorar tu flujo mensual. Si quieres, te propongo un plan simple.',
-    'Estoy viendo oportunidades para que ahorres sin cambiar tu estilo de vida. ¿Empezamos?',
-    'Podemos ordenar tus finanzas con una acción concreta hoy. ¿Qué te preocupa más: gasto o ahorro?'
-  ];
+  function rnd(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pickOne(items) {
+    return items[Math.floor(Math.random() * items.length)];
+  }
+
+  function generateUser() {
+    return {
+      churn_risk: rnd(22, 93),
+      top_category: pickOne(['entretenimiento', 'supermercado', 'delivery', 'viajes']),
+      gasto_nivel: pickOne(['alto', 'medio', 'bajo'])
+    };
+  }
+
+  function getRetentionAction(user) {
+    if (user.churn_risk > 70) {
+      return {
+        key: 'retencion_emocional',
+        starter: 'Queremos mejorar tu experiencia 🙌 Si algo no ha funcionado bien, puedo ayudarte ahora mismo.',
+        detail: 'Puedo priorizar tu caso, revisar un cargo o ayudarte a resolver una fricción reciente sin vueltas.',
+        activate: 'Perfecto. Empecemos por resolver lo más importante ahora. Cuéntame qué no salió bien y te guío paso a paso.',
+        alternative: 'Entiendo. Si prefieres, puedo dejarte una alternativa más simple o revisar solo el punto que más te preocupa.'
+      };
+    }
+
+    if (user.top_category === 'entretenimiento') {
+      return {
+        key: 'cine_2x1',
+        starter: 'Vimos que te encanta el entretenimiento 🎬 Este fin de semana tienes 2x1 en cine con tu tarjeta Hey. ¿Lo activamos?',
+        detail: 'Aplica en complejos participantes este fin de semana pagando con tu tarjeta Hey. Es una activación inmediata y sin costo.',
+        activate: 'Listo. Dejé activo tu beneficio 2x1 para este fin de semana. Cuando quieras, también te comparto los términos de uso.',
+        alternative: 'Si hoy no te interesa el cine, puedo avisarte cuando tengamos otra promo en entretenimiento más alineada contigo.'
+      };
+    }
+
+    if (user.top_category === 'supermercado') {
+      return {
+        key: 'cashback_super',
+        starter: 'Este mes has gastado más en supermercado 🛒 Te activamos 5% de cashback extra esta semana. ¿Te interesa?',
+        detail: 'El beneficio aplica en compras de supermercado con tu tarjeta Hey durante esta semana, con tope promocional de reembolso.',
+        activate: 'Hecho. Ya quedó listo tu cashback extra en supermercado para esta semana. Es una buena forma de recuperar parte de ese gasto recurrente.',
+        alternative: 'Si prefieres, también puedo sugerirte una meta para bajar tu gasto de supermercado sin afectar tus compras clave.'
+      };
+    }
+
+    if (user.top_category === 'delivery') {
+      return {
+        key: 'uber_eats',
+        starter: 'Noté que usas mucho delivery 🍔 Te doy $100 MXN en Uber Eats si haces 3 pedidos. ¿Lo activamos?',
+        detail: 'La dinámica aplica al completar 3 pedidos dentro del periodo promocional. El bono se refleja como beneficio asociado a tu tarjeta Hey.',
+        activate: 'Perfecto. Ya activé el incentivo para delivery. Cuando completes la condición, recibirás el beneficio automáticamente.',
+        alternative: 'Si quieres cuidar más tu gasto en delivery, también puedo proponerte un límite semanal razonable para no pasarte.'
+      };
+    }
+
+    return {
+      key: 'viajes_msi',
+      starter: 'Veo que te interesa viajar ✈️ Tenemos meses sin intereses + cashback en vuelos. ¿Quieres verlo?',
+      detail: 'Puedes diferir compras de vuelos seleccionados y además obtener cashback en la misma compra, sujeto a comercios participantes.',
+      activate: 'Buen timing. Ya te dejo marcada esta opción para que aproveches MSI + cashback cuando reserves tu próximo viaje.',
+      alternative: 'Si aún no tienes una fecha definida, puedo recordarte este beneficio cuando detectemos una compra relacionada con viajes.'
+    };
+  }
+
+  function syncUser(profile) {
+    currentUser = profile || window.uvHeyiaProfile || generateUser();
+    currentAction = getRetentionAction(currentUser);
+  }
 
   function setStatus(text, color) {
     if (!statusEl) return;
@@ -3760,32 +4396,40 @@ function ntxSkipFn() {
     }, ms);
   }
 
-  function getReply(text) {
+  function getIntent(text) {
     var t = (text || '').toLowerCase();
-    if (/gasto|compr|deuda|tarjeta|pago|mes/.test(t)) {
-      return 'Te recomiendo 2 pasos: definir un tope semanal y activar alertas de consumo alto. Si quieres, te doy una meta concreta ahora mismo.';
+    if (/problema|error|cargo|bloque|no puedo|falla|soporte/.test(t)) return 'support';
+    if (/\bsi\b|sí|claro|va|dale|ok|perfecto/.test(t)) return 'activate';
+    if (/\bno\b|luego|despues|después|ahorita no/.test(t)) return 'alternative';
+    if (/ver|detalle|detalles|como|cómo|info/.test(t)) return 'details';
+    return 'unknown';
+  }
+
+  function getReply(text) {
+    var intent = getIntent(text);
+
+    if (intent === 'support') {
+      return 'Entiendo. Si hubo un problema con tu experiencia, lo mejor es resolverlo primero. Cuéntame qué pasó y te indico el siguiente paso más rápido.';
     }
-    if (/ahorro|ahorrar|meta|invert|inversion|rendimiento/.test(t)) {
-      return 'Buen enfoque. Podemos automatizar entre 10% y 15% de tu ingreso al ahorro para que sea constante y sin fricción.';
+    if (intent === 'activate') {
+      return currentAction.activate;
     }
-    if (/problema|error|cargo|bloque|no puedo|falla/.test(t)) {
-      return 'Entiendo. Vamos a resolverlo rápido. Cuéntame qué pasó y en qué momento para indicarte el siguiente paso exacto.';
+    if (intent === 'alternative') {
+      return currentAction.alternative;
     }
-    if (/si|sí|ok|vale|dale|va/.test(t)) {
-      return 'Perfecto. Empezamos por la acción más importante para ti y la dejamos lista hoy.';
+    if (intent === 'details') {
+      return currentAction.detail;
     }
-    if (/no|luego|despues|después/.test(t)) {
-      return 'Sin problema. Cuando quieras retomarlo, aquí estaré para ayudarte con una recomendación puntual.';
-    }
-    return 'Puedo ayudarte con gasto, ahorro o algún tema puntual de tu cuenta. Dime qué quieres mejorar y te propongo una acción simple.';
+
+    return 'Te puedo ayudar a activar este beneficio, explicarte cómo funciona o revisar si hubo algún problema en tu experiencia.';
   }
 
   function startConversation() {
     msgs.innerHTML = '';
+    syncUser(window.uvHeyiaProfile);
     setStatus('● En línea', '#2ed573');
     showTyping(850, function () {
-      var starter = starters[Math.floor(Math.random() * starters.length)];
-      addMsg('in', starter);
+      addMsg('in', currentAction.starter);
     });
   }
 
@@ -3829,6 +4473,13 @@ function ntxSkipFn() {
   });
   send.addEventListener('click', sendMessage);
 
+  window.addEventListener('uvHeyiaProfileUpdated', function (e) {
+    syncUser(e.detail);
+    if (open) startConversation();
+  });
+
+  syncUser(window.uvHeyiaProfile);
+
   /* Si sales de Vista Usuario, cierra este chat */
   document.addEventListener('click', function () {
     if (!body.classList.contains('user-view-active') && open) {
@@ -3836,6 +4487,10 @@ function ntxSkipFn() {
     }
   });
 })();
+document.querySelector('.diagrama-zoom').addEventListener('click', function() {
+  this.style.transform = (this.style.transform === 'scale(1.4)') ? 'scale(1)' : 'scale(1.4)';
+  this.style.zIndex = (this.style.transform === 'scale(1.4)') ? '100' : '1';
+});
 
 </script>
 </body>
