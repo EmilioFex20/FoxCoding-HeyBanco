@@ -2727,7 +2727,119 @@
 
   </div>
 </section>
+<section id="plan-costos" style="background: var(--bg-1); padding: 100px 0;">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8 text-center">
+        <div class="s-label reveal">Plan de Costos</div>
+        <div class="s-rule reveal d1 mx-auto"></div>
+        <h2 class="s-title reveal d1">Eficiencia que escala con el negocio.</h2>
+        <p class="s-body reveal d2 mx-auto">
+          Nuestra arquitectura <strong>Serverless</strong> elimina costos fijos, transformando la inversión en un modelo de pago por uso optimizado para la rentabilidad.
+        </p>
+      </div>
+    </div>
 
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="type-card reveal d1">
+          <div class="tc-icon">💵</div>
+          <h4>Costo Monetario</h4>
+          <p>Pago por uso real (AWS Lambda, S3, Lex). Para 940 usuarios, el procesamiento NLP cuesta apenas <strong>$0.94 USD</strong>.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="type-card reveal d2">
+          <div class="tc-icon">⚡</div>
+          <h4>Costo Computacional</h4>
+          <p>Latencia de 1.2s - 1.8s gracias a <strong>Claude 4.5 Haiku</strong> en Bedrock, con procesamiento elástico que evita cuellos de botella.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="type-card reveal d3">
+          <div class="tc-icon">👥</div>
+          <h4>Costo Humano</h4>
+          <p>Reducción del <strong>40% en costos de atención</strong> al contener el 78% de consultas en canales digitales sin intervención humana.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="chart-wrap reveal d2" style="padding: 30px;">
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; letter-spacing: 0.1em; text-transform: uppercase;">
+            Análisis de Costo Unitario (Abril 2026)
+          </h4>
+          <div class="table-responsive">
+            <table class="table table-dark table-borderless align-middle" style="--bs-table-bg: transparent; color: var(--text-2); font-size: 0.9rem;">
+              <thead style="border-bottom: 1px solid var(--border);">
+                <tr>
+                  <th style="color: var(--text-1); padding-bottom: 15px;">Servicio (AWS us-east-1)</th>
+                  <th style="color: var(--text-1); padding-bottom: 15px;">Consumo / Interacción</th>
+                  <th style="color: var(--text-1); padding-bottom: 15px; text-align: right;">Costo (USD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Amazon Lex V2 (Orquestación)</td>
+                  <td>1 Request de mensaje</td>
+                  <td style="text-align: right;">$0.00075</td>
+                </tr>
+                <tr>
+                  <td>Amazon Comprehend (Sentimiento + PII)</td>
+                  <td>Análisis de ~200 caracteres</td>
+                  <td style="text-align: right;">$0.00060</td>
+                </tr>
+                <tr>
+                  <td>AWS Bedrock (Claude 4.5 Haiku)</td>
+                  <td>~1,050 tokens (Input/Output)</td>
+                  <td style="text-align: right;">$0.00165</td>
+                </tr>
+                <tr>
+                  <td>Lambda + Aurora (C360 Query)</td>
+                  <td>150ms ejecución batch</td>
+                  <td style="text-align: right;">$0.00010</td>
+                </tr>
+                <tr style="border-top: 1px solid var(--border);">
+                  <td colspan="2" style="color: var(--accent); font-weight: 700; padding-top: 15px;">TOTAL POR INTERACCIÓN (Sin Caché)</td>
+                  <td style="color: var(--accent); font-weight: 800; text-align: right; padding-top: 15px; font-size: 1.1rem;">≈ $0.00310</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="color: var(--green); font-weight: 700;">CON PROMPT CACHING (Optimizado)</td>
+                  <td style="color: var(--green); font-weight: 800; text-align: right; font-size: 1.1rem;">≈ $0.00134</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-3); margin-top: 20px; line-height: 1.5;">
+            *Nota: Proyección basada en el uso de Claude Haiku 4.5 para producción, ofreciendo un balance superior entre latencia y seguimiento de instrucciones complejas.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-lg-6">
+        <div class="finding-card reveal-l d1" style="height: 100%;">
+          <div class="finding-dot" style="background: var(--green);"></div>
+          <div>
+            <h5 style="color: var(--text-1); font-size: 1rem; margin-bottom: 8px;">Aumento de Share of Wallet</h5>
+            <p style="font-size: 0.85rem; margin: 0;">Incentivamos el uso de la tarjeta mediante cashback hiper-segmentado basado en <code>categoria_mcc</code>, convirtiendo a Hey en el método de pago principal.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="finding-card reveal-r d1" style="height: 100%;">
+          <div class="finding-dot" style="background: var(--accent);"></div>
+          <div>
+            <h5 style="color: var(--text-1); font-size: 1rem; margin-bottom: 8px;">Cross-selling Inteligente</h5>
+            <p style="font-size: 0.85rem; margin: 0;">Reducción del costo de adquisición (CAC) al ofrecer seguros o créditos solo cuando el historial transaccional detecta una necesidad real.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ================================================
      11. PIPELINE DEL MODELO
