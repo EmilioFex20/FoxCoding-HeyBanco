@@ -189,7 +189,7 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-foreground">
-                  HAVI te recomienda
+                  HEYIA te recomienda
                 </p>
                 <Badge className="bg-primary text-primary-foreground text-xs px-2 py-0.5">
                   IA

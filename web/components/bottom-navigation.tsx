@@ -11,14 +11,14 @@ interface BottomNavigationProps {
 const navItems = [
   { id: "home", label: "Inicio", icon: Home },
   { id: "expenses", label: "Gastos", icon: BarChart3 },
-  { id: "havi", label: "HAVI", icon: MessageCircle },
+  { id: "havi", label: "HEYIA", icon: MessageCircle },
   { id: "recommendations", label: "Tips", icon: Lightbulb },
   { id: "profile", label: "Perfil", icon: User },
 ]
 
 export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/5 bg-[var(--hey-bg-1)] safe-area-bottom backdrop-blur-sm">
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-1">
         {navItems.map((item) => {
           const Icon = item.icon
@@ -32,18 +32,18 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
               className={cn(
                 "flex flex-col items-center gap-0.5 rounded-xl px-3 py-2 transition-all duration-200",
                 isActive && !isHavi && "text-primary",
-                !isActive && "text-muted-foreground",
+                !isActive && !isHavi && "text-muted-foreground",
                 isHavi && "relative -mt-4"
               )}
             >
               {isHavi ? (
                 <div className={cn(
-                  "flex h-14 w-14 items-center justify-center rounded-full transition-all duration-200 shadow-lg",
+                  "flex h-14 w-14 items-center justify-center rounded-full transition-all duration-200 heyia-bubble",
                   isActive 
-                    ? "bg-primary text-primary-foreground shadow-primary/30" 
-                    : "bg-primary/90 text-primary-foreground"
+                    ? "scale-110" 
+                    : "opacity-90"
                 )}>
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-6 w-6 text-[var(--hey-bg-0)]" />
                 </div>
               ) : (
                 <>
